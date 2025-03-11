@@ -1,0 +1,34 @@
+name: CI Remix
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛎️ Clonando el repositorio...
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Instalando Node.js y cacheando dependencias
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: 📦 Instalando dependencias
+        run: npm install
+
+      - name: 🔍 Revisando errores con ESLint
+        run: npm run lint
+
+      - name: 🏗️ Construir la aplicación Remix
+        run: npm run build
