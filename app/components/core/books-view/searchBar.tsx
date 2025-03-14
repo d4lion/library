@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Search, Filter, Grid3X3, List } from "lucide-react"
 import { Input } from "~/components/ui/input"
@@ -14,10 +12,10 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 
 export function SearchBar() {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list")
+  const [, setViewMode] = useState<"grid" | "list">("list")
 
   return (
-    <div className="container mx-auto py-8 -z-[0]">
+    <div className="container mx-auto py-8 -z-[]">
       <div className="bg-slate-50 p-4 rounded-lg">
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="relative flex-1">
