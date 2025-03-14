@@ -193,15 +193,15 @@ export function BookCardV2({
 
             <CardFooter className="p-0 pt-3 mt-auto">
               <div className="flex flex-wrap gap-2">
-                <Button className="gap-2">
+                <Button className="gap-2 cursor-pointer">
                   <Download className="h-4 w-4" />
                   Descargar
                 </Button>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 cursor-pointer">
                   <FileText className="h-4 w-4" />
                   Ver PDF
                 </Button>
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 cursor-pointer">
                   <Headphones className="h-4 w-4" />
                   Audiolibro
                 </Button>
