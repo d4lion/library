@@ -28,9 +28,6 @@ export function BookCard({
   summary,
   bookId,
   cover = "",
-  downloadLink = "",
-  pdfLink = "",
-  audiobookLink = "",
 }: BookCardProps) {
   return (
     <motion.div
