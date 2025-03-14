@@ -25,7 +25,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "~/components/ui/navigation-menu"
-import { navigationMenuTriggerStyle } from "./ui/navigation-menu"
+import { navigationMenuTriggerStyle } from "../../ui/navigation-menu"
 
 const genres = [
   {
