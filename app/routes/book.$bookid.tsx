@@ -1,6 +1,6 @@
 import { useParams } from "@remix-run/react"
-import { Link, Outlet } from "react-router-dom"
-import { ArrowLeft, Outdent } from "lucide-react"
+import { Link } from "react-router-dom"
+import { ArrowLeft } from "lucide-react"
 export default function Book() {
   const { bookid } = useParams()
 
