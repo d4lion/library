@@ -17,7 +17,7 @@ export function SearchBar() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("list")
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-8 -z-[0]">
       <div className="bg-slate-50 p-4 rounded-lg">
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="relative flex-1">

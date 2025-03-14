@@ -1,13 +1,9 @@
-import { BookCard } from "@components/books-view/BookCard"
-
 import { BookCardV2 } from "~/components/core/books-view/BookCardV2"
-import { SearchBar } from "~/components/core/books-view/searchBar"
 
 export default function Books() {
   return (
     <>
       <div className="flex flex-col items-center justify-center gap-4 p-4 sm:mx-40">
-        <SearchBar />
         {BooksData.map((book) => (
           <BookCardV2
             id={book.id}
