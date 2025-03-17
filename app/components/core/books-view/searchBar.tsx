@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Search, Filter, Grid3X3, List } from "lucide-react"
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
@@ -11,8 +11,20 @@ import {
 } from "~/components/ui/select"
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 
-export function SearchBar() {
-  const [, setViewMode] = useState<"grid" | "list">("list")
+import { useBooksLayoutStore } from "~/stores/useBooksLayout"
+
+interface SearchBarProps {
+  results: string | number
+}
+
+export function SearchBar({ results }: SearchBarProps) {
+  const [viewMode, setViewMode] = useState<
+    "grid grid-cols-2" | "flex flex-col"
+  >(useBooksLayoutStore.getState().display)
+
+  useEffect(() => {
+    useBooksLayoutStore.setState({ display: viewMode })
+  }, [viewMode])
 
   return (
     <div className="container mx-auto py-8 -z-[]">
@@ -47,17 +59,19 @@ export function SearchBar() {
 
         <div className="flex justify-between items-center">
           <p className="text-sm text-slate-600">
-            Mostrando <span className="font-medium">2</span> resultados
+            Mostrando <span className="font-medium">{results}</span> resultados
           </p>
           <Tabs
-            defaultValue="list"
-            onValueChange={(value) => setViewMode(value as "grid" | "list")}
+            defaultValue={viewMode}
+            onValueChange={(value) =>
+              setViewMode(value as "grid grid-cols-2" | "flex flex-col")
+            }
           >
             <TabsList className="bg-white">
-              <TabsTrigger value="grid">
+              <TabsTrigger value="grid grid-cols-2" className="cursor-pointer">
                 <Grid3X3 className="h-4 w-4" />
               </TabsTrigger>
-              <TabsTrigger value="list">
+              <TabsTrigger value="flex flex-col" className="cursor-pointer">
                 <List className="h-4 w-4" />
               </TabsTrigger>
             </TabsList>
