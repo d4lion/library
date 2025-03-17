@@ -11,10 +11,21 @@ import {
 } from "~/components/ui/select"
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 
+// States stores
 import { useBooksLayoutStore } from "~/stores/useBooksLayout"
+import { useBookStore } from "~/stores/useBookStore"
 
 interface SearchBarProps {
   results: string | number
+}
+
+const putSearchTerm = (searchTerm: string) => {
+  useBookStore.setState((state) => ({
+    searchFilters: {
+      ...state.searchFilters,
+      searchTerm,
+    },
+  }))
 }
 
 export function SearchBar({ results }: SearchBarProps) {
@@ -35,6 +46,10 @@ export function SearchBar({ results }: SearchBarProps) {
             <Input
               placeholder="Buscar por título, autor o palabra clave..."
               className="pl-10 bg-white"
+              onChange={(e) => {
+                putSearchTerm(e.target.value)
+              }}
+              value={useBookStore.getState().searchFilters.searchTerm}
             />
           </div>
           <div className="flex gap-2">
