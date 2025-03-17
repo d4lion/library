@@ -1,9 +1,8 @@
 import { Card, CardHeader, CardTitle, CardFooter } from "~/components/ui/card"
 import { Badge } from "~/components/ui/badge"
 import { Button } from "~/components/ui/button"
-import { Download, FileText, Headphones } from "lucide-react"
+import { Download, FileText, Headphones, Link as LinkIcon } from "lucide-react"
 import { Link } from "@remix-run/react"
-import { Link as LinkIcon } from "lucide-react"
 
 import { motion } from "framer-motion"
 

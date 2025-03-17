@@ -21,6 +21,9 @@ import {
 } from "~/components/ui/tooltip"
 import { motion } from "framer-motion"
 import { Link } from "@remix-run/react"
+import { useAuthStore } from "~/stores/useAuthStore"
+
+import { Tooltip as OwnToolTip } from "../ToolTips/ToolTip"
 
 interface BookCardProps {
   id: string | number
@@ -30,8 +33,8 @@ interface BookCardProps {
   coverImage: string
   summary: string
   tags: string[]
-  rating?: number
-  year?: number
+  rating?: number | string
+  year?: number | string
 }
 
 export function BookCardV2({
@@ -48,6 +51,7 @@ export function BookCardV2({
   const [expanded, setExpanded] = useState(false)
   const [saved, setSaved] = useState(false)
   const [liked, setLiked] = useState(false)
+  const { isAauthenticated } = useAuthStore()
 
   const truncatedSummary =
     summary.length > 150 && !expanded
@@ -61,7 +65,7 @@ export function BookCardV2({
       transition={{ duration: 0.6 }}
       className="w-full"
     >
-      <Card className="overflow-hidden border-slate-200 hover:shadow-lg transition-shadow duration-300">
+      <Card className="overflow-hidden border-slate-200 hover:shadow-lg transition-shadow duration-300 h-full">
         <div className="flex flex-col md:flex-row gap-6 p-6">
           <div className="relative min-w-[140px] md:min-w-[180px] h-[220px] md:h-[260px] rounded-md overflow-hidden group">
             <img
@@ -69,68 +73,76 @@ export function BookCardV2({
               alt={`Portada de ${title}`}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute top-2 right-2 flex flex-col gap-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white cursor-pointer"
-                      onClick={() => setLiked(!liked)}
-                    >
-                      <Heart
-                        className={`h-4 w-4 ${
-                          liked ? "fill-red-500 text-red-500" : "text-slate-600"
-                        }`}
-                      />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Me gusta</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white cursor-pointer"
-                      onClick={() => setSaved(!saved)}
-                    >
-                      <Bookmark
-                        className={`h-4 w-4 ${
-                          saved ? "fill-primary text-primary" : "text-slate-600"
-                        }`}
-                      />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Guardar</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            {isAauthenticated && (
+              <div className="absolute top-2 right-2 flex flex-col gap-2">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white cursor-pointer"
+                        onClick={() => setLiked(!liked)}
+                      >
+                        <Heart
+                          className={`h-4 w-4 ${
+                            liked
+                              ? "fill-red-500 text-red-500"
+                              : "text-slate-600"
+                          }`}
+                        />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Me gusta</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="secondary"
-                      size="icon"
-                      className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white cursor-pointer"
-                    >
-                      <Share2 className="h-4 w-4 text-slate-600" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Compartir</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white cursor-pointer"
+                        onClick={() => setSaved(!saved)}
+                      >
+                        <Bookmark
+                          className={`h-4 w-4 ${
+                            saved
+                              ? "fill-primary text-primary"
+                              : "text-slate-600"
+                          }`}
+                        />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Guardar</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        className="h-8 w-8 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white cursor-pointer"
+                      >
+                        <Share2 className="h-4 w-4 text-slate-600" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Compartir</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            )}
+
             {year && (
               <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
                 {year}
@@ -193,14 +205,25 @@ export function BookCardV2({
 
             <CardFooter className="p-0 pt-3 mt-auto">
               <div className="flex flex-wrap gap-2">
-                <Button className="gap-2 cursor-pointer">
-                  <Download className="h-4 w-4" />
-                  Descargar
-                </Button>
+                <OwnToolTip
+                  content={
+                    isAauthenticated ? "" : "Inicia sesión para descargar"
+                  }
+                >
+                  <Button
+                    className="gap-2 cursor-pointer"
+                    disabled={!isAauthenticated}
+                  >
+                    <Download className="h-4 w-4" />
+                    Descargar
+                  </Button>
+                </OwnToolTip>
+
                 <Button variant="outline" className="gap-2 cursor-pointer">
                   <FileText className="h-4 w-4" />
                   Ver PDF
                 </Button>
+
                 <Button variant="outline" className="gap-2 cursor-pointer">
                   <Headphones className="h-4 w-4" />
                   Audiolibro

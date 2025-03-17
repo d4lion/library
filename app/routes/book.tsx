@@ -21,7 +21,7 @@ export default function Index() {
             initial={{ scaleX: 0, originX: 0.5 }}
             animate={{ scaleX: 1, originX: 0.5 }}
             exit={{ scaleX: 0, originX: 0.5 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            transition={{ duration: 0.6, ease: "easeIn" }}
           />
         )}
       </AnimatePresence>
