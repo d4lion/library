@@ -25,34 +25,38 @@ export const loader: LoaderFunction = async () => {
   return books
 }
 
+const FramerMotionAnimationVariables = {
+  hidden: { opacity: 0, scale: 0.9, y: 20 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    y: -20,
+    transition: { duration: 0.3, ease: "easeIn" },
+  },
+}
+
 export default function Books() {
   const booksLoaderData = useLoaderData()
-  const { setBooks, quantity, books } = useBookStore()
+  const { setBooks, books, searchFilters } = useBookStore()
   const { display } = useBooksLayoutStore()
 
   useEffect(() => {
     setBooks(booksLoaderData as IBook[])
   }, [booksLoaderData, setBooks])
 
-  const FramerMotionAnimationVariables = {
-    hidden: { opacity: 0, scale: 0.9, y: 20 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: { duration: 0.4, ease: "easeOut" },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.95,
-      y: -20,
-      transition: { duration: 0.3, ease: "easeIn" },
-    },
-  }
+  const filteredBooks = books.filter((book) =>
+    book.title.toLowerCase().includes(searchFilters.searchTerm.toLowerCase())
+  )
 
   return (
     <div className="p-4 sm:mx-40">
-      <SearchBar results={quantity} />
+      <SearchBar results={filteredBooks.length} />
       <AnimatePresence mode="wait">
         <motion.div
           key={display} // Clave única para que Framer detecte cambios
@@ -62,7 +66,7 @@ export default function Books() {
           exit="exit"
           variants={FramerMotionAnimationVariables}
         >
-          {books.map((book) => (
+          {filteredBooks.map((book) => (
             <BookCardV2
               id={book.id}
               key={book.id}
