@@ -57,6 +57,7 @@ import { LoaderFunction, redirect } from "@remix-run/node"
 
 // Cookies handler
 import { CookieParser } from "~/utils/CookiParser"
+import { SiteHeader } from "~/components/core/NavBar/NavBar"
 
 // Datos simulados para los gráficos
 const monthlyData = [
@@ -173,419 +174,422 @@ export default function AdminDashboard() {
   console.log("Dashboard logged in")
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Análisis y estadísticas de la biblioteca digital
-          </p>
+    <>
+      <SiteHeader />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+            <p className="text-muted-foreground">
+              Análisis y estadísticas de la biblioteca digital
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <Select defaultValue={timeRange} onValueChange={setTimeRange}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Seleccionar período" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="24h">Últimas 24 horas</SelectItem>
+                <SelectItem value="7d">Últimos 7 días</SelectItem>
+                <SelectItem value="30d">Últimos 30 días</SelectItem>
+                <SelectItem value="90d">Últimos 90 días</SelectItem>
+                <SelectItem value="1y">Último año</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="outline" className="gap-2">
+              <Filter className="h-4 w-4" />
+              Filtros
+            </Button>
+            <Button className="gap-2">
+              <Download className="h-4 w-4" />
+              Exportar
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <Select defaultValue={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Seleccionar período" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="24h">Últimas 24 horas</SelectItem>
-              <SelectItem value="7d">Últimos 7 días</SelectItem>
-              <SelectItem value="30d">Últimos 30 días</SelectItem>
-              <SelectItem value="90d">Últimos 90 días</SelectItem>
-              <SelectItem value="1y">Último año</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button variant="outline" className="gap-2">
-            <Filter className="h-4 w-4" />
-            Filtros
-          </Button>
-          <Button className="gap-2">
-            <Download className="h-4 w-4" />
-            Exportar
-          </Button>
-        </div>
-      </div>
 
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8"
-      >
-        {/* Tarjeta de Descargas */}
-        <motion.div variants={item}>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Descargas
-              </CardTitle>
-              <Download className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">
-                {totalDescargas.toLocaleString()}
-              </div>
-              <div
-                className={`flex items-center text-sm mt-1 ${
-                  cambioDescargas >= 0 ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {cambioDescargas >= 0 ? (
-                  <TrendingUp className="h-4 w-4 mr-1" />
-                ) : (
-                  <TrendingDown className="h-4 w-4 mr-1" />
-                )}
-                <span>
-                  {Math.abs(cambioDescargas)}% respecto al período anterior
-                </span>
-              </div>
-              <div className="mt-4 h-[60px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={monthlyData.slice(-6)}>
-                    <defs>
-                      <linearGradient
-                        id="colorDescargas"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#0088FE"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#0088FE"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <Area
-                      type="monotone"
-                      dataKey="descargas"
-                      stroke="#0088FE"
-                      fillOpacity={1}
-                      fill="url(#colorDescargas)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Tarjeta de PDFs */}
-        <motion.div variants={item}>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                PDFs Abiertos
-              </CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">
-                {totalPDFs.toLocaleString()}
-              </div>
-              <div
-                className={`flex items-center text-sm mt-1 ${
-                  cambioPDFs >= 0 ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {cambioPDFs >= 0 ? (
-                  <TrendingUp className="h-4 w-4 mr-1" />
-                ) : (
-                  <TrendingDown className="h-4 w-4 mr-1" />
-                )}
-                <span>
-                  {Math.abs(cambioPDFs)}% respecto al período anterior
-                </span>
-              </div>
-              <div className="mt-4 h-[60px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={monthlyData.slice(-6)}>
-                    <defs>
-                      <linearGradient
-                        id="colorPDFs"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#00C49F"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#00C49F"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <Area
-                      type="monotone"
-                      dataKey="pdfs"
-                      stroke="#00C49F"
-                      fillOpacity={1}
-                      fill="url(#colorPDFs)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Tarjeta de Audiolibros */}
-        <motion.div variants={item}>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Audiolibros Escuchados
-              </CardTitle>
-              <Headphones className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">
-                {totalAudiolibros.toLocaleString()}
-              </div>
-              <div
-                className={`flex items-center text-sm mt-1 ${
-                  cambioAudiolibros >= 0 ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {cambioAudiolibros >= 0 ? (
-                  <TrendingUp className="h-4 w-4 mr-1" />
-                ) : (
-                  <TrendingDown className="h-4 w-4 mr-1" />
-                )}
-                <span>
-                  {Math.abs(cambioAudiolibros)}% respecto al período anterior
-                </span>
-              </div>
-              <div className="mt-4 h-[60px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={monthlyData.slice(-6)}>
-                    <defs>
-                      <linearGradient
-                        id="colorAudiolibros"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor="#FFBB28"
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor="#FFBB28"
-                          stopOpacity={0}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <Area
-                      type="monotone"
-                      dataKey="audiolibros"
-                      stroke="#FFBB28"
-                      fillOpacity={1}
-                      fill="url(#colorAudiolibros)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </motion.div>
-
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-        <Card className="col-span-2">
-          <CardHeader>
-            <CardTitle>Tendencias por Mes</CardTitle>
-            <CardDescription>
-              Comparativa de descargas, PDFs abiertos y audiolibros escuchados
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={monthlyData}
-                  margin={{
-                    top: 20,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8"
+        >
+          {/* Tarjeta de Descargas */}
+          <motion.div variants={item}>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Descargas
+                </CardTitle>
+                <Download className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">
+                  {totalDescargas.toLocaleString()}
+                </div>
+                <div
+                  className={`flex items-center text-sm mt-1 ${
+                    cambioDescargas >= 0 ? "text-green-500" : "text-red-500"
+                  }`}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="descargas" name="Descargas" fill="#0088FE" />
-                  <Bar dataKey="pdfs" name="PDFs Abiertos" fill="#00C49F" />
-                  <Bar
-                    dataKey="audiolibros"
-                    name="Audiolibros"
-                    fill="#FFBB28"
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Distribución por Categoría</CardTitle>
-            <CardDescription>
-              Porcentaje de uso por categoría de contenido
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[300px] flex items-center justify-center">
-              <ResponsiveContainer width="100%" height="100%">
-                <RechartsPieChart>
-                  <Pie
-                    data={categoryData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) =>
-                      `${name}: ${(percent * 100).toFixed(0)}%`
-                    }
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {categoryData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
+                  {cambioDescargas >= 0 ? (
+                    <TrendingUp className="h-4 w-4 mr-1" />
+                  ) : (
+                    <TrendingDown className="h-4 w-4 mr-1" />
+                  )}
+                  <span>
+                    {Math.abs(cambioDescargas)}% respecto al período anterior
+                  </span>
+                </div>
+                <div className="mt-4 h-[60px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={monthlyData.slice(-6)}>
+                      <defs>
+                        <linearGradient
+                          id="colorDescargas"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#0088FE"
+                            stopOpacity={0.8}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#0088FE"
+                            stopOpacity={0}
+                          />
+                        </linearGradient>
+                      </defs>
+                      <Area
+                        type="monotone"
+                        dataKey="descargas"
+                        stroke="#0088FE"
+                        fillOpacity={1}
+                        fill="url(#colorDescargas)"
                       />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </RechartsPieChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-      <div className="grid gap-6 md:grid-cols-3 mb-8">
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Actividad Reciente</CardTitle>
-            <CardDescription>
-              Últimas interacciones de los usuarios con la biblioteca
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Usuario</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Título</TableHead>
-                  <TableHead>Fecha</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentActivity.map((activity) => (
-                  <TableRow key={activity.id}>
-                    <TableCell className="font-medium">
-                      {activity.usuario}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        {activity.tipo === "Descarga" && (
-                          <Download className="h-4 w-4 mr-2 text-blue-500" />
-                        )}
-                        {activity.tipo === "PDF" && (
-                          <FileText className="h-4 w-4 mr-2 text-green-500" />
-                        )}
-                        {activity.tipo === "Audiolibro" && (
-                          <Headphones className="h-4 w-4 mr-2 text-amber-500" />
-                        )}
-                        {activity.tipo}
-                      </div>
-                    </TableCell>
-                    <TableCell>{activity.titulo}</TableCell>
-                    <TableCell>{activity.fecha}</TableCell>
+          {/* Tarjeta de PDFs */}
+          <motion.div variants={item}>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  PDFs Abiertos
+                </CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">
+                  {totalPDFs.toLocaleString()}
+                </div>
+                <div
+                  className={`flex items-center text-sm mt-1 ${
+                    cambioPDFs >= 0 ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {cambioPDFs >= 0 ? (
+                    <TrendingUp className="h-4 w-4 mr-1" />
+                  ) : (
+                    <TrendingDown className="h-4 w-4 mr-1" />
+                  )}
+                  <span>
+                    {Math.abs(cambioPDFs)}% respecto al período anterior
+                  </span>
+                </div>
+                <div className="mt-4 h-[60px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={monthlyData.slice(-6)}>
+                      <defs>
+                        <linearGradient
+                          id="colorPDFs"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#00C49F"
+                            stopOpacity={0.8}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#00C49F"
+                            stopOpacity={0}
+                          />
+                        </linearGradient>
+                      </defs>
+                      <Area
+                        type="monotone"
+                        dataKey="pdfs"
+                        stroke="#00C49F"
+                        fillOpacity={1}
+                        fill="url(#colorPDFs)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Tarjeta de Audiolibros */}
+          <motion.div variants={item}>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Audiolibros Escuchados
+                </CardTitle>
+                <Headphones className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">
+                  {totalAudiolibros.toLocaleString()}
+                </div>
+                <div
+                  className={`flex items-center text-sm mt-1 ${
+                    cambioAudiolibros >= 0 ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {cambioAudiolibros >= 0 ? (
+                    <TrendingUp className="h-4 w-4 mr-1" />
+                  ) : (
+                    <TrendingDown className="h-4 w-4 mr-1" />
+                  )}
+                  <span>
+                    {Math.abs(cambioAudiolibros)}% respecto al período anterior
+                  </span>
+                </div>
+                <div className="mt-4 h-[60px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={monthlyData.slice(-6)}>
+                      <defs>
+                        <linearGradient
+                          id="colorAudiolibros"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="5%"
+                            stopColor="#FFBB28"
+                            stopOpacity={0.8}
+                          />
+                          <stop
+                            offset="95%"
+                            stopColor="#FFBB28"
+                            stopOpacity={0}
+                          />
+                        </linearGradient>
+                      </defs>
+                      <Area
+                        type="monotone"
+                        dataKey="audiolibros"
+                        stroke="#FFBB28"
+                        fillOpacity={1}
+                        fill="url(#colorAudiolibros)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </motion.div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+          <Card className="col-span-2">
+            <CardHeader>
+              <CardTitle>Tendencias por Mes</CardTitle>
+              <CardDescription>
+                Comparativa de descargas, PDFs abiertos y audiolibros escuchados
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={monthlyData}
+                    margin={{
+                      top: 20,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="descargas" name="Descargas" fill="#0088FE" />
+                    <Bar dataKey="pdfs" name="PDFs Abiertos" fill="#00C49F" />
+                    <Bar
+                      dataKey="audiolibros"
+                      name="Audiolibros"
+                      fill="#FFBB28"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Distribución por Categoría</CardTitle>
+              <CardDescription>
+                Porcentaje de uso por categoría de contenido
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px] flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RechartsPieChart>
+                    <Pie
+                      data={categoryData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) =>
+                        `${name}: ${(percent * 100).toFixed(0)}%`
+                      }
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {categoryData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </RechartsPieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3 mb-8">
+          <Card className="md:col-span-2">
+            <CardHeader>
+              <CardTitle>Actividad Reciente</CardTitle>
+              <CardDescription>
+                Últimas interacciones de los usuarios con la biblioteca
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Usuario</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Título</TableHead>
+                    <TableHead>Fecha</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <Button variant="ghost" className="gap-1">
-              Ver todas las actividades
-              <ArrowUpRight className="h-4 w-4" />
-            </Button>
-          </CardFooter>
-        </Card>
+                </TableHeader>
+                <TableBody>
+                  {recentActivity.map((activity) => (
+                    <TableRow key={activity.id}>
+                      <TableCell className="font-medium">
+                        {activity.usuario}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          {activity.tipo === "Descarga" && (
+                            <Download className="h-4 w-4 mr-2 text-blue-500" />
+                          )}
+                          {activity.tipo === "PDF" && (
+                            <FileText className="h-4 w-4 mr-2 text-green-500" />
+                          )}
+                          {activity.tipo === "Audiolibro" && (
+                            <Headphones className="h-4 w-4 mr-2 text-amber-500" />
+                          )}
+                          {activity.tipo}
+                        </div>
+                      </TableCell>
+                      <TableCell>{activity.titulo}</TableCell>
+                      <TableCell>{activity.fecha}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button variant="ghost" className="gap-1">
+                Ver todas las actividades
+                <ArrowUpRight className="h-4 w-4" />
+              </Button>
+            </CardFooter>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Resumen General</CardTitle>
-            <CardDescription>
-              Estadísticas clave de la biblioteca
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Users className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span className="text-sm">Usuarios activos</span>
+          <Card>
+            <CardHeader>
+              <CardTitle>Resumen General</CardTitle>
+              <CardDescription>
+                Estadísticas clave de la biblioteca
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Users className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <span className="text-sm">Usuarios activos</span>
+                  </div>
+                  <span className="font-medium">1,245</span>
                 </div>
-                <span className="font-medium">1,245</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <BookOpen className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span className="text-sm">Total de libros</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <BookOpen className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <span className="text-sm">Total de libros</span>
+                  </div>
+                  <span className="font-medium">5,382</span>
                 </div>
-                <span className="font-medium">5,382</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span className="text-sm">Tiempo promedio</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <span className="text-sm">Tiempo promedio</span>
+                  </div>
+                  <span className="font-medium">18 min</span>
                 </div>
-                <span className="font-medium">18 min</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span className="text-sm">Nuevos este mes</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <span className="text-sm">Nuevos este mes</span>
+                  </div>
+                  <span className="font-medium">124</span>
                 </div>
-                <span className="font-medium">124</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <BarChart3 className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <span className="text-sm">Tasa de conversión</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <BarChart3 className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <span className="text-sm">Tasa de conversión</span>
+                  </div>
+                  <span className="font-medium">8.5%</span>
                 </div>
-                <span className="font-medium">8.5%</span>
               </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-center">
-            <Button variant="outline" className="w-full">
-              Ver informe completo
-            </Button>
-          </CardFooter>
-        </Card>
+            </CardContent>
+            <CardFooter className="flex justify-center">
+              <Button variant="outline" className="w-full">
+                Ver informe completo
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
