@@ -19,6 +19,7 @@ import { useEffect } from "react"
 
 // Framer Motion
 import { motion, AnimatePresence } from "framer-motion"
+import { AppLayout } from "~/components/core/Layouts/AppLayout"
 
 export const loader: LoaderFunction = async () => {
   const books: IBook[] = await getBooks()
@@ -55,33 +56,45 @@ export default function Books() {
   )
 
   return (
-    <div className="p-4 sm:mx-40">
-      <SearchBar results={filteredBooks.length} />
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={display} // Clave única para que Framer detecte cambios
-          className={`${display} flex items-center justify-center gap-4`}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          variants={FramerMotionAnimationVariables}
-        >
-          {filteredBooks.map((book) => (
-            <BookCardV2
-              id={book.id}
-              key={book.id}
-              title={book.title}
-              author={book.author}
-              publisher={book.editorial}
-              summary={book.summary}
-              coverImage={book.cover}
-              tags={book.genre}
-              rating={book.rating ?? 4.5}
-              year={book.year ?? 2021}
-            />
-          ))}
-        </motion.div>
-      </AnimatePresence>
-    </div>
+    <AppLayout>
+      <div className="p-4 sm:mx-40">
+        <SearchBar results={filteredBooks.length} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={display} // Clave única para que Framer detecte cambios
+            className={`${display} flex items-center justify-center gap-4`}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={FramerMotionAnimationVariables}
+          >
+            {filteredBooks.map((book, index) => (
+              <motion.div
+                key={book.id}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{
+                  duration: 0.4,
+                  ease: "easeOut",
+                  delay: index * 0.35, // Retrasa cada elemento progresivamente
+                }}
+              >
+                <BookCardV2
+                  id={book.id}
+                  title={book.title}
+                  author={book.author}
+                  publisher={book.editorial}
+                  summary={book.summary}
+                  coverImage={book.cover}
+                  tags={book.genre}
+                  rating={book.rating ?? 4.5}
+                  year={book.year ?? 2021}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </AppLayout>
   )
 }

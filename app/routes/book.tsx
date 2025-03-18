@@ -1,20 +1,20 @@
 import { Outlet } from "@remix-run/react"
-import { AnimatePresence, motion } from "framer-motion"
-import { useEffect, useState } from "react"
+// import { AnimatePresence, motion } from "framer-motion"
+// import { useEffect, useState } from "react"
 
 export default function Index() {
-  const [isTransitioning, setIsTransitioning] = useState(false)
+  // const [isTransitioning, setIsTransitioning] = useState(false)
 
-  useEffect(() => {
-    setIsTransitioning(true)
-    setTimeout(() => {
-      setIsTransitioning(false)
-    }, 2000)
-  }, [])
+  // useEffect(() => {
+  //   setIsTransitioning(true)
+  //   setTimeout(() => {
+  //     setIsTransitioning(false)
+  //   }, 2000)
+  // }, [])
   return (
     <>
       <Outlet />
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {isTransitioning && (
           <motion.div
             className="fixed top-0 left-0 w-full h-full bg-[#003865] z-50"
@@ -24,7 +24,7 @@ export default function Index() {
             transition={{ duration: 0.6, ease: "easeIn" }}
           />
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   )
 }
