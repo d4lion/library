@@ -7,7 +7,6 @@ import {
 } from "@remix-run/react"
 
 import "./tailwind.css"
-import { SiteHeader } from "./components/core/NavBar/NavBar"
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,7 +18,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <SiteHeader />
         {children}
         <ScrollRestoration />
         <Scripts />
