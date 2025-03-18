@@ -10,15 +10,19 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 cursor-pointer",
         destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 cursor-pointer",
         outline:
-          "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground cursor-pointer",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 cursor-pointer",
+        ghost: "hover:bg-accent hover:text-accent-foreground cursor-pointer",
+        link: "text-primary underline-offset-4 hover:underline cursor-pointer",
+        primary:
+          "bg-[#256AA2] text-white shadow-xs hover:bg-[#1A4C7A] focus-visible:ring-[#256AA2] focus-visible:ring-2 dark:focus-visible:ring-[#256AA2] dark:focus-visible:ring-4 cursor-pointer",
+        secundary:
+          "bg-[#FA4616] text-white shadow-xs hover:bg-[#D63A0B] cursor-pointer focus-visible:ring-[#FA4616] focus-visible:ring-2 dark:focus-visible:ring-[#FA4616] dark:focus-visible:ring-4",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
