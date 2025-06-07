@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - dev
+      - feat/*
 
 jobs:
   build:
@@ -18,17 +19,23 @@ jobs:
       - name: 🛎️ Clonando el repositorio...
         uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10.11.1
+          run_install: false
+
       - name: 🏗️ Instalando Node.js y cacheando dependencias
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: "npm"
+          node-version: 20
+          cache: "pnpm"
 
       - name: 📦 Instalando dependencias
-        run: npm install
+        run: pnpm install
 
       - name: 🔍 Revisando errores con ESLint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: 🏗️ Construir la aplicación Remix
-        run: npm run build
+        run: pnpm run build
