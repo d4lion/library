@@ -1,4 +1,8 @@
 import type { MetaFunction } from "@remix-run/node"
+import { ContenidoRecomendadoSection } from "~/components/core/home/ContenidoRecomendado"
+import { HeroSection } from "~/components/core/home/HeroSection"
+import { EstadisticasSection } from "~/components/core/home/SeccionEstadisticas"
+import { ProgramasSection } from "~/components/core/home/SeccionPrograma"
 import { AppLayout } from "~/components/core/Layouts/AppLayout"
 
 export const meta: MetaFunction = () => {
@@ -11,7 +15,10 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <AppLayout>
-      <h1 className="text-2xl font-bold text-center mt-8">Welcome to Remix!</h1>
+      <HeroSection />
+      <ProgramasSection />
+      <ContenidoRecomendadoSection />
+      <EstadisticasSection />
     </AppLayout>
   )
 }
