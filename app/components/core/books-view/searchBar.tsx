@@ -75,9 +75,6 @@ export function SearchBar({ results }: SearchBarProps) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="relevance">Relevancia</SelectItem>
-                <SelectItem value="newest">Más recientes</SelectItem>
-                <SelectItem value="oldest">Más antiguos</SelectItem>
-
                 <SelectItem value="a-z">A-Z</SelectItem>
                 <SelectItem value="z-a">Z-A</SelectItem>
               </SelectContent>
