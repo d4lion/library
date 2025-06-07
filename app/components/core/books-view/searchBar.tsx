@@ -33,12 +33,19 @@ export function SearchBar({ results }: SearchBarProps) {
     "grid grid-cols-2" | "flex flex-col"
   >(useBooksLayoutStore.getState().display)
 
+  const [render, setRender] = useState(false)
   const { orderBy, searchFilters } = useBookStore()
 
   useEffect(() => {
     useBooksLayoutStore.setState({ display: viewMode })
     orderBy(searchFilters.order.toUpperCase())
   }, [viewMode, orderBy, searchFilters.order])
+
+  useEffect(() => {
+    setRender(true)
+  }, [])
+
+  if (!render) return null
 
   return (
     <div className="container mx-auto py-8 -z-[]">
