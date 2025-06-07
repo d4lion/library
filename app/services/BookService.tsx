@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 import { IBook } from "@interfaces/Book"
 
 export async function getBooks(): Promise<IBook[]> {

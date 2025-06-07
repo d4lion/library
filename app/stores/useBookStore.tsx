@@ -1,7 +1,6 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
 
-// eslint-disable-next-line import/no-unresolved
 import { IBook } from "~/interfaces/Book"
 
 interface SearchFilters {
