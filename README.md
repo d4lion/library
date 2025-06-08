@@ -14,7 +14,7 @@ Una iniciativa para distribuir el conocimiento de manera accesible y moderna.
   - [📦 Deployment](#-deployment)
 ---
 
-## 🇪🇸 Español
+# 🇪🇸 Español
 
 ### 📚 Descripción
 
@@ -46,10 +46,12 @@ Una vez construido, inicia el servidor:
 pnpm start
 ```
 
+### 💡 Contribuciones
+¿Tienes ideas o sugerencias? ¡Tu colaboración es bienvenida!
+Abre un issue o envía un pull request.
 
 
-
-## 🇺🇸 English
+# 🇺🇸 English
 
 ### 📚 Description
 
@@ -80,3 +82,7 @@ Once built, start the server:
 ```bash
 pnpm start
 ```
+
+# 💡 Contributions
+Have ideas or suggestions? You're welcome to collaborate!
+Feel free to open an issue or submit a pull request.
