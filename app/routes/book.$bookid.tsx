@@ -1,4 +1,5 @@
 import { useParams } from "@remix-run/react"
+import { useNavigate } from "@remix-run/react"
 
 // State store
 import { useBookStore } from "~/stores/useBookStore"
@@ -22,6 +23,7 @@ import { Badge } from "~/components/ui/badge"
 import { motion } from "framer-motion"
 import { Card, CardContent } from "~/components/ui/card"
 import { useAuthStore } from "~/stores/useAuthStore"
+import { MetaFunction } from "@remix-run/node"
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -68,12 +70,26 @@ const recommendedBooks = [
   },
 ]
 
+export const meta: MetaFunction = () => {
+  const { bookid } = useParams()
+  const { books } = useBookStore()
+  const book = books.find((book) => book.id.toString() === bookid)
+
+  return [
+    {
+      title: `${book?.title} | ${book?.editorial}`,
+    },
+  ]
+}
+
 export default function Book() {
   const { bookid } = useParams()
   const { books } = useBookStore()
   const { isAauthenticated } = useAuthStore()
 
   const book = books.find((book) => book.id.toString() === bookid)
+
+  const navigation = useNavigate()
 
   return (
     <div className="m-auto p-4 ">
@@ -130,6 +146,7 @@ export default function Book() {
                   <Button
                     className="w-full gap-2 justify-center"
                     variant="secundary"
+                    onClick={() => navigation(`/view/book/${bookid}`)}
                   >
                     <BookOpen className="h-4 w-4" />
                     Leer texto

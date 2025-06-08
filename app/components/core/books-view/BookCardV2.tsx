@@ -1,5 +1,10 @@
 import { useState } from "react"
 
+// Navigation
+import { useNavigate } from "@remix-run/react"
+import { Link } from "@remix-run/react"
+
+// LucideChart icons
 import {
   Heart,
   Share2,
@@ -10,15 +15,18 @@ import {
   FileText,
   Headphones,
 } from "lucide-react"
+
+// Components
 import { Button } from "~/components/ui/button"
 import { Badge } from "~/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader } from "~/components/ui/card"
-
-import { motion } from "framer-motion"
-import { Link } from "@remix-run/react"
-import { useAuthStore } from "~/stores/useAuthStore"
-
 import { Tooltip as OwnToolTip } from "../ToolTips/ToolTip"
+
+// Animations
+import { motion } from "framer-motion"
+
+// Stores
+import { useAuthStore } from "~/stores/useAuthStore"
 
 // Interfaces
 import {
@@ -98,7 +106,7 @@ export function BookCardV2({
               expanded={expanded}
               setExpanded={setExpanded}
             />
-            <BookActions isAuthenticated={isAauthenticated} />
+            <BookActions isAuthenticated={isAauthenticated} bookId={id} />
           </div>
         </div>
       </Card>
@@ -276,26 +284,41 @@ const BookSummary = ({
   </div>
 )
 
-const BookActions = ({ isAuthenticated }: { isAuthenticated: boolean }) => (
-  <CardFooter className="p-0 pt-3 mt-auto gap-3">
-    <OwnToolTip content={isAuthenticated ? "" : "Inicia sesión para descargar"}>
-      <Button
-        className="gap-2 cursor-pointer"
-        disabled={!isAuthenticated}
-        variant="primary"
+const BookActions = ({
+  isAuthenticated,
+  bookId,
+}: {
+  isAuthenticated: boolean
+  bookId: number | string
+}) => {
+  const navigation = useNavigate()
+  return (
+    <CardFooter className="p-0 pt-3 mt-auto gap-3">
+      <OwnToolTip
+        content={isAuthenticated ? "" : "Inicia sesión para descargar"}
       >
-        <Download className="h-4 w-4" />
-        Descargar
-      </Button>
-    </OwnToolTip>
+        <Button
+          className="gap-2 cursor-pointer"
+          disabled={!isAuthenticated}
+          variant="primary"
+        >
+          <Download className="h-4 w-4" />
+          Descargar
+        </Button>
+      </OwnToolTip>
 
-    <Button variant="secundary" className="gap-2 cursor-pointer">
-      <FileText className="h-4 w-4" />
-      Ver PDF
-    </Button>
-    <Button variant="outline" className="gap-2 cursor-pointer">
-      <Headphones className="h-4 w-4" />
-      Audiolibro
-    </Button>
-  </CardFooter>
-)
+      <Button
+        variant="secundary"
+        className="gap-2 cursor-pointer"
+        onClick={() => navigation(`/view/book/${bookId}`)}
+      >
+        <FileText className="h-4 w-4" />
+        Ver PDF
+      </Button>
+      <Button variant="outline" className="gap-2 cursor-pointer">
+        <Headphones className="h-4 w-4" />
+        Audiolibro
+      </Button>
+    </CardFooter>
+  )
+}
