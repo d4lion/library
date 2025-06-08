@@ -1,7 +1,7 @@
 import { BookCardV2 } from "~/components/core/books-view/BookCardV2"
 
 import { SearchBar } from "@components/books-view/searchBar"
-import { LoaderFunction } from "@remix-run/node"
+import { LoaderFunction, MetaFunction } from "@remix-run/node"
 
 // Services
 import { getBooks } from "~/services/BookService"
@@ -24,6 +24,14 @@ import { AppLayout } from "~/components/core/Layouts/AppLayout"
 export const loader: LoaderFunction = async () => {
   const books: IBook[] = await getBooks()
   return books
+}
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      title: "Libreria Secretos Para Contar",
+    },
+  ]
 }
 
 const FramerMotionAnimationVariables = {
