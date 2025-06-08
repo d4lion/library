@@ -5,11 +5,19 @@ on:
     branches:
       - main
       - dev
+    paths-ignore:
+      - 'README.md'
+      - 'CODE_OF_CONDUCT.md'
+      - '.gitignore'
   push:
     branches:
       - main
       - dev
       - feat/*
+    paths-ignore:
+      - 'README.md'
+      - 'CODE_OF_CONDUCT.md'
+      - '.gitignore'
 
 jobs:
   build:
