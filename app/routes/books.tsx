@@ -90,11 +90,11 @@ export default function Books() {
                 <BookCardV2
                   id={book.id}
                   title={book.title}
-                  author={book.author}
-                  publisher={book.editorial}
+                  author={book.authors[0].name}
+                  publisher={book.authors[0].name}
                   summary={book.summary}
                   coverImage={book.cover}
-                  tags={book.genre}
+                  tags={book.genres}
                   rating={book.rating ?? 4.5}
                   year={book.year ?? 2021}
                 />
