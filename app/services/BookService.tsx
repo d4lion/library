@@ -1,10 +1,29 @@
 import { IBook } from "@interfaces/Book"
 
-export async function getBooks(): Promise<IBook[]> {
-  // Peticion a la api
-  const response = await fetch(
-    "https://67433f9cb7464b1c2a64205a.mockapi.io/api/v1/books"
-  )
+enum DevelopmentState {
+  TESTING_LOCAL_API = "TESTING_LOCAL_API",
+  TESTING_REMOTE_API = "TESTING_REMOTE_API",
+  PRODUCTION = "PRODUCTION",
+}
 
-  return response.json()
+export async function getBooks(): Promise<IBook[]> {
+  const DEVELOPMENT_STATE = process.env.DEVELOPMENT_STATE
+
+  // Peticion a la api
+  if (DEVELOPMENT_STATE === DevelopmentState.TESTING_LOCAL_API) {
+    console.info(DevelopmentState.TESTING_LOCAL_API)
+    const response = await fetch(process.env.LOCAL_BOOKS_ENDPOINT_URL || "")
+
+    return await response.json()
+  } else if (DEVELOPMENT_STATE === DevelopmentState.TESTING_REMOTE_API) {
+    console.info(DevelopmentState.TESTING_REMOTE_API)
+    const response = await fetch(process.env.REMOTE_MOCKAPI_URL || "")
+
+    return await response.json()
+  } else {
+    console.info(DevelopmentState.PRODUCTION)
+    const response = await fetch(process.env.REMOTE_MOCKAPI_URL || "")
+
+    return await response.json()
+  }
 }
