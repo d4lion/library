@@ -77,7 +77,10 @@ export default function Book() {
 
   return (
     <div className="m-auto p-4 ">
-      <BookNavBarView bookTitle={book?.title} bookAuthor={book?.author} />
+      <BookNavBarView
+        bookTitle={book?.title}
+        bookAuthor={book?.authors[0].name}
+      />
       <div className="flex-1 container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Columna Izquierda - Portada e información */}
@@ -105,7 +108,7 @@ export default function Book() {
                     <Star
                       key={star}
                       className={`h-5 w-5 ${
-                        star <= Math.floor(4.3)
+                        star <= Math.floor(book?.rating ?? 0)
                           ? "fill-yellow-400 text-yellow-400"
                           : "text-muted-foreground"
                       }`}
@@ -149,7 +152,7 @@ export default function Book() {
                   <h3 className="text-sm font-medium mb-3">Detalles</h3>
                   <dl className="grid grid-cols-2 gap-y-2 text-sm">
                     <dt className="text-muted-foreground">Autor</dt>
-                    <dd>{book?.author}</dd>
+                    <dd>{book?.authors[0].name}</dd>
 
                     <dt className="text-muted-foreground">Editorial</dt>
                     <dd>{book?.editorial}</dd>
@@ -164,7 +167,7 @@ export default function Book() {
                     <dd>español</dd>
 
                     <dt className="text-muted-foreground">ISBN</dt>
-                    <dd>4368864465</dd>
+                    <dd>{book?.isbn}</dd>
                   </dl>
                 </div>
 
@@ -172,7 +175,7 @@ export default function Book() {
                 <div className="w-full mt-4 pt-4 border-t">
                   <h3 className="text-sm font-medium mb-2">Categorías</h3>
                   <div className="flex flex-wrap gap-2">
-                    {book?.genre.map((tag, index) => (
+                    {book?.genres.map((tag, index) => (
                       <Badge
                         key={index}
                         variant="secondary"
