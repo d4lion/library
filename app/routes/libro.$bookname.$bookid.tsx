@@ -1,4 +1,4 @@
-import { useParams } from "@remix-run/react"
+import { useLoaderData, useParams } from "@remix-run/react"
 
 // State store
 import { useBookStore } from "~/stores/useBookStore"
@@ -22,7 +22,10 @@ import { Badge } from "~/components/ui/badge"
 import { motion } from "framer-motion"
 import { Card, CardContent } from "~/components/ui/card"
 import { useAuthStore } from "~/stores/useAuthStore"
-import { MetaFunction } from "@remix-run/node"
+import { LoaderFunction, MetaFunction } from "@remix-run/node"
+import { getBooks } from "~/services/BookService"
+import { IBook } from "~/interfaces/Book"
+import { useEffect } from "react"
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -69,42 +72,62 @@ const recommendedBooks = [
   },
 ]
 
+export const loader: LoaderFunction = async () => {
+  const books: IBook[] = await getBooks()
+  return books
+}
+
 export const meta: MetaFunction = () => {
   const { bookid } = useParams()
   const { books } = useBookStore()
+
   const book = books.find((book) => book.id.toString() === bookid)
 
   return [
     {
-      title: book?.title || "Libreria Secretos Para Contar",
+      title: "Libreria Secretos Para Contar",
     },
     {
       property: "og:title",
-      content: book?.title,
+      content: book?.title || "Libreria Secretos Para Contar",
     },
     {
       property: "og:description",
-      content: book?.summary,
+      content: book?.summary || "Libreria Secretos Para Contar",
     },
     {
       property: "og:image",
-      content: book?.cover,
+      content: book?.cover || "/placeholder.svg",
     },
     {
       property: "og:type",
       content: "website",
     },
-    { property: "og:site_name", content: "Libreria Secretos Para Contar" },
-    { property: "og:locale", content: "es_CO" },
+    {
+      property: "og:site_name",
+      content: "Libreria Secretos Para Contar",
+    },
+    {
+      property: "og:locale",
+      content: "es_CO",
+    },
   ]
 }
 
 export default function Book() {
   const { bookid } = useParams()
-  const { books } = useBookStore()
-  const { isAauthenticated } = useAuthStore()
+  const booksData = useLoaderData<typeof loader>()
+  const { setBooks } = useBookStore()
 
-  const book = books.find((book) => book.id.toString() === bookid)
+  useEffect(() => {
+    setBooks(booksData)
+  }, [booksData, setBooks])
+
+  const book = booksData.find(
+    (book: { id: { toString: () => string | undefined } }) =>
+      book.id.toString() === bookid
+  ) as IBook
+  const { isAauthenticated } = useAuthStore()
 
   return (
     <div className="m-auto p-4 ">
