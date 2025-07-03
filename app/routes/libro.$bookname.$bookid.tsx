@@ -22,6 +22,7 @@ import { Badge } from "~/components/ui/badge"
 import { motion } from "framer-motion"
 import { Card, CardContent } from "~/components/ui/card"
 import { useAuthStore } from "~/stores/useAuthStore"
+import { MetaFunction } from "@remix-run/node"
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -67,6 +68,36 @@ const recommendedBooks = [
     tags: ["Ficción", "Novela"],
   },
 ]
+
+export const meta: MetaFunction = () => {
+  const { bookid } = useParams()
+  const { books } = useBookStore()
+  const book = books.find((book) => book.id.toString() === bookid)
+
+  return [
+    {
+      title: book?.title || "Libreria Secretos Para Contar",
+    },
+    {
+      property: "og:title",
+      content: book?.title,
+    },
+    {
+      property: "og:description",
+      content: book?.summary,
+    },
+    {
+      property: "og:image",
+      content: book?.cover,
+    },
+    {
+      property: "og:type",
+      content: "website",
+    },
+    { property: "og:site_name", content: "Libreria Secretos Para Contar" },
+    { property: "og:locale", content: "es_CO" },
+  ]
+}
 
 export default function Book() {
   const { bookid } = useParams()
