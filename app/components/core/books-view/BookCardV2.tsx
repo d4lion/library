@@ -42,6 +42,8 @@ interface BookCardProps {
   tags: string[]
   rating?: number | string
   year?: number | string
+  pdfLink: string
+  audioLink: string
 }
 
 export function BookCardV2({
@@ -54,6 +56,8 @@ export function BookCardV2({
   tags,
   rating = 4.5,
   year,
+  pdfLink,
+  audioLink,
 }: BookCardProps) {
   const [expanded, setExpanded] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -104,7 +108,11 @@ export function BookCardV2({
                 setExpanded={setExpanded}
               />
 
-              <BookActions isAuthenticated={isAauthenticated} />
+              <BookActions
+                isAuthenticated={isAauthenticated}
+                pdfLink={pdfLink}
+                audioLink={audioLink}
+              />
             </div>
           </div>
         </Card>
@@ -231,10 +239,13 @@ const BookHeader = ({
   publisher,
   rating,
 }: BookHeaderProps) => (
-  <CardHeader className="p-0 pb-3 space-y-2">
+  <CardHeader className="p-0 pb-3">
     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
       <div className="flex-1 min-w-0">
-        <Link to={`/book/${id}`} className="block group">
+        <Link
+          to={`/libro/${title.replaceAll(" ", "-").toLowerCase()}/${id}`}
+          className="block group"
+        >
           <h3 className="text-lg sm:text-xl font-bold text-slate-800 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
             {title}
           </h3>
@@ -249,7 +260,7 @@ const BookHeader = ({
 
     <div className="space-y-1">
       <div className="text-slate-600 text-sm sm:text-base">
-        <span className="text-slate-500">por:</span>{" "}
+        <span className="text-slate-500">Autor: </span>{" "}
         <span className="font-medium truncate">{author}</span>
       </div>
       <div className="text-xs sm:text-sm text-slate-500">
@@ -313,7 +324,15 @@ const BookSummary = ({
   </div>
 )
 
-const BookActions = ({ isAuthenticated }: { isAuthenticated: boolean }) => (
+const BookActions = ({
+  isAuthenticated,
+  pdfLink,
+  audioLink,
+}: {
+  isAuthenticated: boolean
+  pdfLink: string
+  audioLink: string
+}) => (
   <CardFooter className="p-0 mt-auto">
     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
       <Tooltip>
@@ -339,7 +358,9 @@ const BookActions = ({ isAuthenticated }: { isAuthenticated: boolean }) => (
         className="gap-2 cursor-pointer flex-1 sm:flex-none"
       >
         <FileText className="h-4 w-4" />
-        <span className="truncate">Ver PDF</span>
+        <Link to={pdfLink} target="_blank" className="truncate">
+          Ver PDF
+        </Link>
       </Button>
 
       <Button
@@ -347,8 +368,16 @@ const BookActions = ({ isAuthenticated }: { isAuthenticated: boolean }) => (
         className="gap-2 cursor-pointer flex-1 sm:flex-none bg-transparent"
       >
         <Headphones className="h-4 w-4" />
-        <span className="truncate sm:hidden">Audio</span>
-        <span className="truncate hidden sm:inline">Audiolibro</span>
+        <Link to={audioLink} target="_blank" className="truncate sm:hidden">
+          Audio
+        </Link>
+        <Link
+          to={audioLink}
+          target="_blank"
+          className="truncate hidden sm:inline"
+        >
+          Audiolibro
+        </Link>
       </Button>
     </div>
   </CardFooter>
