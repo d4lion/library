@@ -26,6 +26,24 @@ Esta librería nace del proyecto *Secretos para Contar*, como una nueva forma de
 
 Este proyecto utiliza [`pnpm`](https://pnpm.io) para una gestión de paquetes rápida y eficiente.
 
+### 📝 Variables de entorno
+El proyecto está haciendo uso de variables de entorno para definir de manera mas sencilla y elastica cada uno de los endpoints que se definen y a su vez para facilitar cuando se hace uso de
+APis locales con bases de datos locales vs cuando se realizan ya en producción, la estructura a seguir es esta:
+
+```toml
+# PARA EL DEVELOPMENT MODE SE PUEDEN ESTOS 3 ESTADOS
+#
+# TESTING_LOCAL_API -> que usa los endpoints locales
+# TESTING_REMOTE_API -> que usa los endpoints remotos
+# DEVELOPMENT ->
+# 
+DEVELOPMENT_STATE="TESTING_LOCAL_API"
+
+REMOTE_MOCKAPI_URL="https://***.mockapi.io/api/v1/books" # en este caso se usa mockapi pero se puede cambiar por cualquier endpoint
+LOCAL_API="http://localhost:5111"
+LOCAL_BOOKS_ENDPOINT_URL="http://localhost:5111/api/books"
+```
+
 Para iniciar el entorno de desarrollo:
 
 ```bash
