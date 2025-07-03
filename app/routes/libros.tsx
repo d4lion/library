@@ -63,6 +63,8 @@ export default function Books() {
     book.title.toLowerCase().includes(searchFilters.searchTerm.toLowerCase())
   )
 
+  console.log(filteredBooks)
+
   return (
     <AppLayout>
       <div className="p-4 sm:mx-40">
@@ -91,12 +93,14 @@ export default function Books() {
                   id={book.id}
                   title={book.title}
                   author={book.authors[0].name}
-                  publisher={book.authors[0].name}
+                  publisher={book.editorial}
                   summary={book.summary}
                   coverImage={book.cover}
                   tags={book.genres}
-                  rating={book.rating ?? 4.5}
-                  year={book.year ?? 2021}
+                  rating={book.rating}
+                  year={book.year}
+                  pdfLink={book.pdfLink}
+                  audioLink={book.audioBookLink}
                 />
               </motion.div>
             ))}

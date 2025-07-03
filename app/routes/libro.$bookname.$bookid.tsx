@@ -108,7 +108,7 @@ export default function Book() {
                     <Star
                       key={star}
                       className={`h-5 w-5 ${
-                        star <= Math.floor(4.3)
+                        star <= Math.floor(book?.rating ?? 0)
                           ? "fill-yellow-400 text-yellow-400"
                           : "text-muted-foreground"
                       }`}
@@ -167,7 +167,7 @@ export default function Book() {
                     <dd>español</dd>
 
                     <dt className="text-muted-foreground">ISBN</dt>
-                    <dd>4368864465</dd>
+                    <dd>{book?.isbn}</dd>
                   </dl>
                 </div>
 
