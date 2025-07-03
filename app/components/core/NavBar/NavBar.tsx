@@ -43,36 +43,28 @@ export function SiteHeader() {
                 Contenidos
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <li className="row-span-3">
-                    <NavigationMenuLink asChild>
-                      <Link to="/books" className="h-full">
-                        Books
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link to="/books">Books</Link>
-                    </NavigationMenuLink>
-                  </li>
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link to="/books">Books</Link>
-                    </NavigationMenuLink>
-                  </li>
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link to="/books">Books</Link>
-                    </NavigationMenuLink>
-                  </li>
+                <ul className="grid gap-3 md:w-[400px] lg:w-[500px] rounded-lg shadow-lg border-t border-gray-200">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      to="/libros"
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                    >
+                      <div className="text-sm font-medium leading-none">
+                        Libros
+                      </div>
+                      <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                        Explora nuestra colección de libros digitales y
+                        audiolibros
+                      </p>
+                    </Link>
+                  </NavigationMenuLink>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
-                <Link to="/books" className="bg-transparent">
+                <Link to="/documentacion" className="bg-transparent">
                   Documentación
                 </Link>
               </NavigationMenuLink>
