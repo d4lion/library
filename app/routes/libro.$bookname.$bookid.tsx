@@ -85,7 +85,7 @@ export const meta: MetaFunction = () => {
 
   return [
     {
-      title: "Libreria Secretos Para Contar",
+      title: book?.title || "Libreria Secretos Para Contar",
     },
     {
       property: "og:title",
